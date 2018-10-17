@@ -1,7 +1,3 @@
-
-//PRZEPISAC REQUESTa UZYWAJAC FETCH
-
-
 App = React.createClass({
 	getInitialState() {
 		return {
@@ -18,19 +14,8 @@ App = React.createClass({
 		const GIPHY_PUB_KEY = 'hwhFYYSAZaZFQaREf8tSB78oNchTFjYU';
 		const url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;  // 2.
 
-		return fetch(url)
-			.then(function(response){
-				return response.json()
-			})
-			.then(function(myJson) {
-				const data = myJson.data;
-					const gif = {
-						url: data.fixed_width_downsampled_url,
-						sourceUrl: data.url
-					};
-					return gif;
-					
-			})
+		return fetch(url);
+
 
 
 
@@ -60,7 +45,18 @@ App = React.createClass({
 			loading: true  // 2.
 		});
 		this.getGif(searchingText)
-
+			.then(function(response){
+				return response.json()
+			})
+			.then(function(myJson) {
+				const data = myJson.data;
+					const gif = {
+						url: data.fixed_width_downsampled_url,
+						sourceUrl: data.url
+					};
+					return gif;
+					
+			})
 
 
 		// tutaj mozna dodac caly kod z "onload" (20-31)			
