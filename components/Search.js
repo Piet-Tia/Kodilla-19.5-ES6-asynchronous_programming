@@ -12,6 +12,9 @@ Search = React.createClass({
 		if (searchingText.length > 2) {
 			this.props.onSearch(searchingText);
 		}
+		else if (searchingText.length < 3) {
+			this.props.onClear();
+		}
 	},
 
 	handleKeyUp: function (event) {

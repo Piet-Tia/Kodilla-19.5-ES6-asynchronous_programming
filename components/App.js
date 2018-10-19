@@ -16,28 +16,25 @@ App = React.createClass({
 
 		return fetch(url);
 
-
-
-
-/*		return new Promise(function (resolve, reject) {
-			const xhr = new XMLHttpRequest();  // 3.
-			xhr.open('GET', url);
-			xhr.onload = function () {
-				if (xhr.status === 200) {
-					const data = JSON.parse(xhr.responseText).data; // 4.
-					const gif = {  // 5.
-						url: data.fixed_width_downsampled_url,
-						sourceUrl: data.url
+		/*		return new Promise(function (resolve, reject) {
+					const xhr = new XMLHttpRequest();  // 3.
+					xhr.open('GET', url);
+					xhr.onload = function () {
+						if (xhr.status === 200) {
+							const data = JSON.parse(xhr.responseText).data; // 4.
+							const gif = {  // 5.
+								url: data.fixed_width_downsampled_url,
+								sourceUrl: data.url
+							};
+							resolve(gif);
+							return;
+							// 6.
+						}
+						reject({ error: 'no data' })
 					};
-					resolve(gif);
-					return;
-					// 6.
-				}
-				reject({ error: 'no data' })
-			};
-			xhr.send();
-		})
-*/
+					xhr.send();
+				})
+		*/
 	},
 
 	handleSearch: function (searchingText) {  // 1.
@@ -45,32 +42,39 @@ App = React.createClass({
 			loading: true  // 2.
 		});
 		this.getGif(searchingText)
-			.then(function(response){
+			.then(function (response) {
 				return response.json()
 			})
-			.then(function(myJson) {
+			.then(function (myJson) {
 				const data = myJson.data;
-					const gif = {
-						url: data.fixed_width_downsampled_url,
-						sourceUrl: data.url
-					};
-					return gif;
-					
+				const gif = {
+					url: data.fixed_width_downsampled_url,
+					sourceUrl: data.url
+				};
+				return gif;
 			})
 
-
-		// tutaj mozna dodac caly kod z "onload" (20-31)			
+			// tutaj mozna dodac caly kod z "onload" (20-31)			
 			.then(gif => {  // 3.
 				this.setState({  // 4
 					loading: false,  // a
 					gif: gif,  // b
 					searchingText: searchingText  // c
 				});
-				return 0;
+				return;
 			},
 				error => console.log(error)
 			)
 			.then();
+	},
+
+	handleClearing: function () {
+		this.setState({
+			loading: false,
+			gif: {},
+			searchingText: ''
+		})
+		return;
 	},
 
 	render: function () {
@@ -85,7 +89,7 @@ App = React.createClass({
 			<div style={styles}>
 				<h1>Wyszukiwarka GIFow!</h1>
 				<p>Znajdź gifa na <a href='http://giphy.com'>giphy</a>. Naciskaj enter, aby pobrać kolejne gify.</p>
-				<Search onSearch={this.handleSearch} />
+				<Search onSearch={this.handleSearch} onClear={this.handleClearing} />
 				<Gif
 					loading={this.state.loading}
 					url={this.state.gif.url}
